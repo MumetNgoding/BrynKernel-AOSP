@@ -751,9 +751,15 @@ void md_super_write(struct mddev *mddev, struct md_rdev *rdev,
 
 void md_super_wait(struct mddev *mddev)
 {
+<<<<<<< HEAD
 	/* wait for all superblock writes that were scheduled to complete */
 	wait_event(mddev->sb_wait, atomic_read(&mddev->pending_writes)==0);
 }
+=======
+	struct bio *bio = bio_alloc(GFP_NOIO, 1);
+	struct completion event;
+	int ret;
+>>>>>>> [PATCH] Avoid deadlock in sync_page_io by using GFP_NOIO
 
 int sync_page_io(struct md_rdev *rdev, sector_t sector, int size,
 		 struct page *page, int op, int op_flags, bool metadata_op)
