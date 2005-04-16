@@ -570,7 +570,7 @@ static void mmtimer_tasklet(unsigned long data)
 	if (t->it.mmtimer.clock == TIMER_OFF)
 		goto out;
 
-	t->it_overrun = 0;
+	if (posix_timer_event(t, 0) != 0) {
 
 	mn->next = rb_next(&x->list);
 	rb_erase(&x->list, &mn->timer_head);
