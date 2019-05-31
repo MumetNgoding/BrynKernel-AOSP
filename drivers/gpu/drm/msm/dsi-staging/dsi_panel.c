@@ -23,6 +23,17 @@
 #include "dsi_panel.h"
 #include "dsi_ctrl_hw.h"
 
+#include <linux/fs.h>
+#include <asm/uaccess.h>
+#include <asm/fcntl.h>
+
+#include <drm/drm_notifier.h>
+#include <soc/qcom/socinfo.h>
+
+#ifdef CONFIG_KLAPSE
+#include <linux/klapse.h>
+#endif
+
 /**
  * topology is currently defined by a set of following 3 values:
  * 1. num of layer mixers
