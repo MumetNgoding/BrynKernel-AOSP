@@ -146,6 +146,14 @@ config CPU_FREQ_DEFAULT_GOV_PIXEL_SCHEDUTIL
 	select CPU_FREQ_GOV_PERFORMANCE
 	help
 	  Use the 'pixel_schedutil' CPUFreq governor by default. If unsure,
+
+config CPU_FREQ_DEFAULT_GOV_PIXEL_SMURFUTIL
+	bool "pixel_smurfutil"
+	depends on SMP
+	select CPU_FREQ_GOV_PIXEL_SMURFUTIL
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the 'pixel_smurfutil' CPUFreq governor by default. If unsure,
 	  have a look at the help section of that governor. The fallback
 	  governor will be 'performance'.
 
@@ -298,6 +306,9 @@ config CPU_FREQ_GOV_BLU_SCHEDUTIL
 
 config CPU_FREQ_GOV_PIXEL_SCHEDUTIL
 	bool "'pixel_schedutil' cpufreq policy governor"
+
+config CPU_FREQ_GOV_PIXEL_SMURFUTIL
+	bool "'pixel_smurfutil' cpufreq policy governor"
 	depends on CPU_FREQ && SMP
 	select CPU_FREQ_GOV_ATTR_SET
 	select IRQ_WORK
