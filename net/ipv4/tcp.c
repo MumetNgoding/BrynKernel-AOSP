@@ -2347,10 +2347,6 @@ int tcp_disconnect(struct sock *sk, int flags)
 	tp->bytes_acked = 0;
 	tp->bytes_received = 0;
 
-	/* Clean up fastopen related fields */
-	tcp_free_fastopen_req(tp);
-	inet->defer_connect = 0;
-
 	WARN_ON(inet->inet_num && !icsk->icsk_bind_hash);
 
 	if (sk->sk_frag.page) {
