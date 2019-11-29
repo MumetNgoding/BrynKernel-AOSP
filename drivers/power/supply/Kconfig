@@ -521,6 +521,12 @@ config NX30P6093
 	  usb_psy to disable CC detection on the event of any water/debris
 	  detected at USBIN.
 
+config MSM_BCL_SOMC_CTL
+	bool "BCL driver to control with new condition"
+	depends on BATTERY_BCL
+	help
+	  Say Y here to enable new condition.
+
 source "drivers/power/supply/qcom/Kconfig"
 
 endif # POWER_SUPPLY
