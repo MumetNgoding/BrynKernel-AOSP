@@ -1,0 +1,27 @@
+menu "Custom Hotplug drivers"
+
+config CUSTOM_HOTPLUG
+	bool "Enable custom hotplug support"
+
+
+config ALUCARD_CONTROL
+	bool "Alucard"
+	depends on CUSTOM_HOTPLUG
+	help
+	  Known for being battery friendly. Developed by Alucard_24@XDA
+
+config THUNDERPLUG_CONTROL
+	bool "Thunderplug"
+	depends on CUSTOM_HOTPLUG
+	help
+	  This driver hotplugs cpu cores based on per-core load
+
+config MSM_HOTPLUG
+ 	bool "MSM hotplug by [Fluxi]"
+ 	depends on HOTPLUG_CPU
+ 	default n
+ 	help
+ 	  The MSM hotplug driver controls on-/offlining of additional cores based on current cpu load.
+ 
+
+endmenu
