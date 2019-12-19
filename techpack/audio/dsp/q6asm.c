@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2012-2019, The Linux Foundation. All rights reserved.
- * Copyright (C) 2019 XiaoMi, Inc.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -1775,6 +1774,13 @@ static int32_t q6asm_srvc_callback(struct apr_client_data *data, void *priv)
 		return 0;
 	}
 
+	if (dir != IN && dir != OUT) {
+		pr_err("%s: Invalid audio port index: %d\n", __func__, dir);
+		if ((session_id > 0 && session_id <= SESSION_MAX))
+			spin_unlock_irqrestore(
+				&(session[session_id].session_lock), flags);
+			return 0;
+	}
 	port = &ac->port[dir];
 
 	switch (data->opcode) {

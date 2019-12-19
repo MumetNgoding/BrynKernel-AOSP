@@ -1,5 +1,4 @@
 /* Copyright (c) 2012-2019, The Linux Foundation. All rights reserved.
- * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -3251,6 +3250,14 @@ struct afe_param_id_aptx_sync_mode {
  */
 #define AFE_DECODER_PARAM_ID_DEPACKETIZER_ID        0x00013235
 
+#define CAPI_V2_PARAM_ID_APTX_ENC_SWITCH_TO_MONO    0x0001332A
+
+struct aptx_channel_mode_param_t {
+	struct apr_hdr hdr;
+	struct afe_port_cmd_set_param_v2 param;
+	struct afe_port_param_data_v2 pdata;
+	u32 channel_mode;
+} __packed;
 /*
  * Data format to send compressed data
  * is transmitted/received over Slimbus lines.
@@ -3631,6 +3638,7 @@ union afe_enc_config_data {
 struct afe_enc_config {
 	u32 format;
 	u32 scrambler_mode;
+	u32 mono_mode;
 	union afe_enc_config_data data;
 };
 
@@ -3669,6 +3677,18 @@ struct avs_enc_set_scrambler_param_t {
 	 *  0 : disable scrambler
 	 */
 	uint32_t enable_scrambler;
+};
+
+/*
+ * Payload of the CAPI_V2_PARAM_ID_APTX_ENC_SWITCH_TO_MONO parameter.
+ */
+struct afe_enc_set_channel_mode_param_t {
+	/*
+	*  Supported values:
+	*  1 : mono
+	*  2 : dual_mono
+	*/
+	u32 channel_mode;
 };
 
 /*
@@ -3726,6 +3746,7 @@ union afe_port_config {
 	struct avs_dec_depacketizer_id_param_t    dec_depkt_id_param;
 	struct afe_enc_level_to_bitrate_map_param_t    map_param;
 	struct afe_enc_dec_imc_info_param_t       imc_info_param;
+	struct afe_enc_set_channel_mode_param_t   channel_mode_param;
 } __packed;
 
 struct afe_audioif_config_command_no_payload {
@@ -10042,7 +10063,7 @@ struct afe_clk_set {
 	 * for enable and disable clock.
 	 *	"clk_freq_in_hz", "clk_attri", and "clk_root"
 	 *	are ignored in disable clock case.
-	 *	@values 
+	 *	@values 
 	 *	- 0 -- Disabled
 	 *	- 1 -- Enabled  @tablebulletend
 	 */
