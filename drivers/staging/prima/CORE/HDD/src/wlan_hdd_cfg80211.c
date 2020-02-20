@@ -4746,9 +4746,25 @@ static int __wlan_hdd_cfg80211_extscan_get_valid_channels(struct wiphy *wiphy,
     int ret,len = 0;;
 
     ENTER();
+    ret = wlan_hdd_validate_context(pHddCtx);
+    if (ret)
+        return false;
 
-    if (!wlan_hdd_is_extscan_supported(pAdapter, pHddCtx))
-        return -EINVAL;
+    if (!pAdapter) {
+        hddLog(VOS_TRACE_LEVEL_DEBUG, FL("Invalid adapter"));
+        return false;
+    }
+
+    if (pAdapter->device_mode != WLAN_HDD_INFRA_STATION) {
+        hddLog(VOS_TRACE_LEVEL_DEBUG,
+               FL("ext scans only supported on STA ifaces"));
+        return false;
+    }
+
+    if (VOS_FTM_MODE == hdd_get_conparam()) {
+        hddLog(VOS_TRACE_LEVEL_DEBUG, FL("Command not allowed in FTM mode"));
+        return false;
+    }
 
     if (nla_parse(tb, QCA_WLAN_VENDOR_ATTR_EXTSCAN_SUBCMD_CONFIG_PARAM_MAX,
                   data, dataLen,
@@ -6346,71 +6362,6 @@ wlan_hdd_cfg80211_get_concurrency_matrix(struct wiphy *wiphy,
                                                      data_len);
     vos_ssr_unprotect(__func__);
 
-    return ret;
-}
-
-
-static int
-__wlan_hdd_cfg80211_get_fw_mem_dump(struct wiphy *wiphy,
-                                    struct wireless_dev *wdev,
-                                    const void *data, int data_len)
-{
-    hdd_context_t *pHddCtx = wiphy_priv(wiphy);
-    int ret;
-    ENTER();
-
-    ret = wlan_hdd_validate_context(pHddCtx);
-    if (0 != ret)
-    {
-        return ret;
-    }
-
-    if( !pHddCtx->cfg_ini->enableFwrMemDump ||
-       (FALSE == sme_IsFeatureSupportedByFW(MEMORY_DUMP_SUPPORTED)))
-    {
-       hddLog(VOS_TRACE_LEVEL_INFO, FL("FW dump Logging not supported"));
-       return -EOPNOTSUPP;
-    }
-    /*call common API for FW mem dump req*/
-    ret = wlan_hdd_fw_mem_dump_req(pHddCtx);
-
-    if (!ret)
-    {
-        /*indicate to userspace the status of fw mem dump */
-        wlan_indicate_mem_dump_complete(true);
-    }
-    else
-    {
-        /*else send failure to userspace */
-        wlan_indicate_mem_dump_complete(false);
-    }
-    EXIT();
-    return ret;
-}
-
-/**
- * wlan_hdd_cfg80211_get_fw_mem_dump() - Get FW memory dump
- * @wiphy:   pointer to wireless wiphy structure.
- * @wdev:    pointer to wireless_dev structure.
- * @data:    Pointer to the NL data.
- * @data_len:Length of @data
- *
- * This is called when wlan driver needs to get the firmware memory dump
- * via vendor specific command.
- *
- * Return:   0 on success, error number otherwise.
- */
-
-static int
-wlan_hdd_cfg80211_get_fw_mem_dump(struct wiphy *wiphy,
-                                              struct wireless_dev *wdev,
-                                         const void *data, int data_len)
-{
-    int ret = 0;
-    vos_ssr_protect(__func__);
-    ret = __wlan_hdd_cfg80211_get_fw_mem_dump(wiphy, wdev, data,
-                                        data_len);
-    vos_ssr_unprotect(__func__);
     return ret;
 }
 
@@ -8540,16 +8491,6 @@ __wlan_hdd_cfg80211_get_logger_supp_feature(struct wiphy *wiphy,
 
 	features = 0;
 
-	if (hdd_is_memdump_supported())
-		features |= WIFI_LOGGER_MEMORY_DUMP_SUPPORTED;
-
-	if (hdd_ctx->cfg_ini->wlanLoggingEnable &&
-	    hdd_ctx->cfg_ini->enableFatalEvent &&
-	    hdd_ctx->is_fatal_event_log_sup) {
-		features |= WIFI_LOGGER_PER_PACKET_TX_RX_STATUS_SUPPORTED;
-		features |= WIFI_LOGGER_CONNECT_EVENT_SUPPORTED;
-	}
-
 	reply_skb = cfg80211_vendor_cmd_alloc_reply_skb(wiphy,
 			sizeof(uint32_t) + NLA_HDRLEN + NLMSG_HDRLEN);
 	if (!reply_skb) {
@@ -8753,14 +8694,6 @@ const struct wiphy_vendor_command hdd_wiphy_vendor_commands[] =
     },
     {
         .info.vendor_id = QCA_NL80211_VENDOR_ID,
-        .info.subcmd = QCA_NL80211_VENDOR_SUBCMD_WIFI_LOGGER_MEMORY_DUMP,
-        .flags = WIPHY_VENDOR_CMD_NEED_WDEV |
-                 WIPHY_VENDOR_CMD_NEED_NETDEV |
-                 WIPHY_VENDOR_CMD_NEED_RUNNING,
-        .doit = wlan_hdd_cfg80211_get_fw_mem_dump
-    },
-    {
-        .info.vendor_id = QCA_NL80211_VENDOR_ID,
         .info.subcmd = QCA_NL80211_VENDOR_SUBCMD_SETBAND,
         .flags = WIPHY_VENDOR_CMD_NEED_WDEV |
             WIPHY_VENDOR_CMD_NEED_NETDEV |
@@ -8955,12 +8888,6 @@ struct nl80211_vendor_cmd_info wlan_hdd_cfg80211_vendor_events[] =
         .vendor_id = QCA_NL80211_VENDOR_ID,
         .subcmd = QCA_NL80211_VENDOR_SUBCMD_TDLS_STATE
     },
-    [QCA_NL80211_VENDOR_SUBCMD_WIFI_LOGGER_MEMORY_DUMP_INDEX] = {
-        .vendor_id = QCA_NL80211_VENDOR_ID,
-        .subcmd = QCA_NL80211_VENDOR_SUBCMD_WIFI_LOGGER_MEMORY_DUMP
-    },
-
-
     [QCA_NL80211_VENDOR_SUBCMD_NAN_INDEX] = {
         .vendor_id = QCA_NL80211_VENDOR_ID,
         .subcmd = QCA_NL80211_VENDOR_SUBCMD_NAN
