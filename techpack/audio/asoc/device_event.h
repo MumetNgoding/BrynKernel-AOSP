@@ -1,4 +1,4 @@
-/* Copyright (c) 2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2020, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -13,8 +13,20 @@
 #ifndef __DEVICE_EVENT_H
 #define __DEVICE_EVENT_H
 
-#define QC_AUDIO_EXTERNAL_SPK_1_EVENT "qc_ext_spk_1"
-#define QC_AUDIO_EXTERNAL_SPK_2_EVENT "qc_ext_spk_2"
-#define QC_AUDIO_EXTERNAL_MIC_EVENT "qc_ext_mic"
+&qcom_seecom {
+	status = "okay";
+};
 
-#endif /* __DEVICE_EVENT_H */
+&thermal_zones {
+	mdm-core-step {
+		trips {
+			mdm-step-trip-0 {
+				temperature = <105000>;
+			};
+
+			mdm-step-trip-1 {
+				temperature = <115000>;
+			};
+		};
+	};
+};
