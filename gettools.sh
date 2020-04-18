@@ -18,8 +18,8 @@ git clone https://github.com/mylove90/AnyKernel3 -b master
 
 #Download Clang
 if [ ! -d clang ]; then
-    wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/tags/android-10.0.0_r20/clang-r353983c.tar.gz
-    mkdir -p clang/clang-r353983c/
-    tar xvzf clang-r353983c.tar.gz -C clang/clang-r353983c
-    rm clang-r353983c.tar.gz
+    wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r377782c.tar.gz
+    mkdir -p clang/clang-r377782c/
+    tar xvzf clang-r377782c.tar.gz -C clang/clang-r377782c
+    rm clang-r377782c.tar.gz
 fi
