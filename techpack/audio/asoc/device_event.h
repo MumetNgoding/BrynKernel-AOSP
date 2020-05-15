@@ -17,3 +17,4 @@
 	status = "okay";
 };
 
+#endif /* __DEVICE_EVENT_H */
