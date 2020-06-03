@@ -166,6 +166,10 @@ void __init of_populate_phandle_cache_early(void)
 static int __init of_free_phandle_cache(void)
 {
 	unsigned long flags;
+	const char *name;
+	struct kobject *parent;
+	struct property *pp;
+	int rc;
 
 	if (!of_kset)
 		return 0;
