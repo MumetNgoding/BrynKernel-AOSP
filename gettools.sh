@@ -18,10 +18,10 @@ git clone https://github.com/mylove90/AnyKernel3 -b master
 
 #Download Clang
 if [ ! -d clang ]; then
-    wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r383902.tar.gz
-    mkdir -p clang/clang-r383902
-    tar xvzf clang-r383902.tar.gz -C clang/clang-r383902
-    rm clang-r383902.tar.gz
+    wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r383902c.tar.gz
+    mkdir -p clang/clang-r383902c
+    tar xvzf clang-r383902c.tar.gz -C clang/clang-r383902c
+    rm clang-r383902c.tar.gz
 fi
 
 # Download libufdt
