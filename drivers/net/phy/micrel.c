@@ -28,6 +28,8 @@
 #include <linux/micrel_phy.h>
 #include <linux/of.h>
 #include <linux/clk.h>
+#include <linux/netdevice.h>
+#include <linux/etherdevice.h>
 #include <linux/delay.h>
 
 /* Operation Mode Strap Override */
