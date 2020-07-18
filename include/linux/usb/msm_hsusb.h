@@ -114,6 +114,8 @@ enum usb_id_state {
 };
 
 #define USB_NUM_BUS_CLOCKS      3
+#define IDEV_CHG_MAX	3000
+#define IDEV_HVDCP_CHG_MAX	3000
 
 /**
  * struct msm_otg: OTG driver data. Shared by HCD and DCD.

@@ -54,6 +54,10 @@
 #include "dbm.h"
 #include "debug.h"
 #include "xhci.h"
+
+#define DWC3_IDEV_CHG_MAX 3000
+#define DWC3_HVDCP_CHG_MAX 3000
+
 #ifdef CONFIG_TUSB1064_XR_MISC
 #include "../../misc/tusb1064.h"
 #endif
