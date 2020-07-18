@@ -4,7 +4,7 @@ menu "IO Schedulers"
 
 config IOSCHED_NOOP
 	bool
-	default y
+	default n
 	---help---
 	  The no-op I/O scheduler is a minimal scheduler that does basic merging
 	  and sorting. Its main uses include non-disk based block devices like
@@ -14,7 +14,7 @@ config IOSCHED_NOOP
 
 config IOSCHED_DEADLINE
 	tristate "Deadline I/O scheduler"
-	default y
+	default n
 	---help---
 	  The deadline I/O scheduler is simple and compact. It will provide
 	  CSCAN service with FIFO expiration of requests, switching to
@@ -23,7 +23,7 @@ config IOSCHED_DEADLINE
 
 config IOSCHED_CFQ
 	tristate "CFQ I/O scheduler"
-	default y
+	default n
 	---help---
 	  The CFQ I/O scheduler tries to distribute bandwidth equally
 	  among all processes in the system. It should provide a fair
@@ -34,7 +34,7 @@ config IOSCHED_CFQ
 
 config IOSCHED_ANXIETY
 	tristate "Anxiety I/O scheduler"
-	default y
+	default n
 	---help---
 	  The Anxiety I/O scheduler prioritizes latency over everything
 	  else. It uses a simple algorithm that selects from FIFO queues
@@ -50,7 +50,7 @@ config CFQ_GROUP_IOSCHED
 
 config IOSCHED_TRIPNDROID
 	tristate "TripNDroid IO Scheduler"
-	default n
+	default y
 	---help---
 	  The TripNDroid IO Scheduler is based on noop, deadline and vr
 	  it uses deadlines to ensure some fairness. The scheduler is build
@@ -58,7 +58,7 @@ config IOSCHED_TRIPNDROID
 
 choice
 	prompt "Default I/O scheduler"
-	default DEFAULT_CFQ
+	default DEFAULT_TRIPNDROID
 	help
 	  Select the I/O scheduler which will be used by default for all
 	  block devices.
