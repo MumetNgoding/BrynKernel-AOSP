@@ -991,6 +991,37 @@ void sme_set_vowifi_mode(tpAniSirGlobal pMac, bool enable)
     }
 }
 
+/*
+ * sme_set_olpc_mode() - Set OLPC (low power)
+ * @pMac - context handler
+ * @enable - boolean value that determines the state
+ *
+ * The function sends the low power mode to firmware received
+ * via driver command
+ */
+void sme_set_olpc_mode(tpAniSirGlobal pMac, bool enable)
+{
+    tSirMsgQ msgQ;
+    tSirRetStatus retCode = eSIR_SUCCESS;
+
+    vos_mem_zero(&msgQ, sizeof(tSirMsgQ));
+    msgQ.type = WDA_LOW_POWER_MODE;
+    msgQ.reserved = 0;
+    msgQ.bodyval = enable;
+
+    retCode = wdaPostCtrlMsg(pMac, &msgQ);
+    if(eSIR_SUCCESS != retCode)
+    {
+        smsLog(pMac, LOGE,
+           FL("Posting WDA_LOW_POWER_MODE to WDA failed, reason=%X"),
+           retCode);
+    }
+    else
+    {
+        smsLog(pMac, LOG1, FL("posted WDA_LOW_POWER_MODE command"));
+    }
+}
+
 tANI_BOOLEAN smeProcessCommand( tpAniSirGlobal pMac )
 {
     tANI_BOOLEAN fContinue = eANI_BOOLEAN_FALSE;
@@ -1456,6 +1487,19 @@ sme_process_cmd:
                             fContinue = eANI_BOOLEAN_TRUE;
                             break;
 
+                        case eSmeCommandOlpcMode:
+                            csrLLUnlock(&pMac->sme.smeCmdActiveList);
+                            sme_set_olpc_mode(pMac,
+                                              pCommand->u.olpc_mode_enable);
+                            if (csrLLRemoveEntry(&pMac->sme.smeCmdActiveList,
+                                &pCommand->Link, LL_ACCESS_LOCK)) {
+                                csrReleaseCommand(pMac, pCommand);
+                            }
+                            VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
+                                      "sme_command_olpc_mode processed");
+                            fContinue = eANI_BOOLEAN_TRUE;
+                            break;
+
                         default:
                             //something is wrong
                             //remove it from the active list
@@ -1770,6 +1814,7 @@ eHalStatus sme_UpdateChannelConfig(tHalHandle hHal)
                       &pMac->scan.base20MHzChannels, FALSE);
   return eHAL_STATUS_SUCCESS;
 }
+
 #endif // FEATURE_WLAN_SCAN_PNLO
 
 eHalStatus sme_UpdateChannelList(tHalHandle hHal)
@@ -15502,6 +15547,33 @@ eHalStatus sme_UpdateBlacklist(tHalHandle hHal, uint8_t session_id,
                  FL("failed to post eSmeCommandBlackList command"));
         csrReleaseCommand(pMac, pCommand);
         vos_mem_free(pRoamParams);
+        return eHAL_STATUS_FAILURE;
+    }
+
+    return eHAL_STATUS_SUCCESS;
+}
+
+eHalStatus sme_update_olpc_mode(tHalHandle hHal, bool enable)
+{
+    tSmeCmd *pCommand;
+    tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
+
+    pCommand = csrGetCommandBuffer(pMac);
+    if (pCommand == NULL) {
+        VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
+                  FL("Failed to get command buffer for roam params"));
+        return eHAL_STATUS_RESOURCES;
+    }
+
+    smsLog(pMac, LOG1, "Posting OLPC command to csr queue");
+
+    pCommand->command = eSmeCommandOlpcMode;
+    pCommand->u.olpc_mode_enable = enable;
+
+    if (!HAL_STATUS_SUCCESS(csrQueueSmeCommand(pMac, pCommand, TRUE))) {
+        VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
+                 FL("failed to post OLPC sme command"));
+        csrReleaseCommand(pMac, pCommand);
         return eHAL_STATUS_FAILURE;
     }
 
