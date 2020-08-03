@@ -14,11 +14,12 @@ git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarc
 git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r35 --depth=1 stock_32
 
 # Clone AnyKernel3
-git clone https://github.com/mylove90/AnyKernel3 -b master
+git clone https://github.com/MumetNgoding/AnyKernel3.git -b master
 
 #Download Clang
 if [ ! -d clang ]; then
-    wget https://github.com/silont-project/silont-clang.git
+    git clone https://github.com/silont-project/silont-clang.git
+    git clone https://github.com/MumetNgoding/proton-clang.git --depth=1
 fi
 
 # Download libufdt
