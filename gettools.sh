@@ -19,7 +19,7 @@ git clone https://github.com/MumetNgoding/AnyKernel3.git -b master
 #Download Clang
 if [ ! -d clang ]; then
     git clone https://github.com/silont-project/silont-clang.git
-    git clone https://github.com/MumetNgoding/proton-clang.git --depth=1
+#    git clone https://github.com/MumetNgoding/proton-clang.git --depth=1
 fi
 
 # Download libufdt
