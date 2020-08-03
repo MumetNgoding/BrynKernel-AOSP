@@ -13,7 +13,7 @@ jobs:
            cd Q
            chmod a+x gettools.sh
            chmod a+x silontbuild.sh
-           ./gettols.sh
+           ./gettools.sh
            ./silontbuild.sh
 workflows:
   version: 2.1
