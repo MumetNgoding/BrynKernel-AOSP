@@ -4,11 +4,14 @@
 # Copyright (C) 2018 Rama Bondan Prakoso (rama982)
 # Android Kernel Build Script
 
+# Add Depedency
+apt-get -y install bc build-essential zip curl libstdc++6 git default-jre default-jdk wget python-is-python3 gcc clang libssl-dev rsync flex bison
+
 # Main environtment
 KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb
 ZIP_DIR=$KERNEL_DIR/AnyKernel3
-CONFIG=onclite-aosp_defconfig
+CONFIG=silont_defconfig
 CROSS_COMPILE="aarch64-linux-android-"
 CROSS_COMPILE_ARM32="arm-linux-androideabi-"
 PATH=:"${KERNEL_DIR}/silont-clang/bin:${PATH}:${KERNEL_DIR}/stock/bin:${PATH}:${KERNEL_DIR}/stock_32/bin:${PATH}"
