@@ -6,7 +6,7 @@ jobs:
    steps:
       - run:
           command: |
-           apt-get -y update && apt-get -y upgrade && apt-get -y install curl libstdc++6 git wget python-is-python3 gcc clang python3-pip pip3 install telegram-send
+           apt-get -y update && apt-get -y upgrade && apt-get -y install curl libstdc++6 git wget python-is-python3 gcc clang python3-pip telegram-send nano
            git config --global user.name "MumetNgoding"
            git config --global user.email "nugroho31.com@gmail.com"
            git clone https://github.com/MumetNgoding/BrynKernel-AOSP --depth 1 Q
