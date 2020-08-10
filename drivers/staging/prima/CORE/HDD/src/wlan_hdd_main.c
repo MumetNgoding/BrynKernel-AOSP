@@ -250,7 +250,6 @@ static int hdd_ParseUserParams(tANI_U8 *pValue, tANI_U8 **ppArg);
 void wlan_hdd_restart_timer_cb(v_PVOID_t usrDataForCallback);
 void hdd_set_wlan_suspend_mode(bool suspend);
 void hdd_set_vowifi_mode(hdd_context_t *hdd_ctx, bool enable);
-void hdd_set_olpc_mode(tHalHandle hHal, bool low_power);
 
 v_U16_t hdd_select_queue(struct net_device *dev,
     struct sk_buff *skb
@@ -877,19 +876,6 @@ static int hdd_parse_setrmcactionperiod_command(tANI_U8 *pValue,
        "uActionPeriod: %d", *pActionPeriod);
 
     return 0;
-}
-
-/*
-+ * hdd_set_olpc_mode() - Process the OLPCMODE command and invoke the SME api
-*
-* @hHal: context handler
-* @low_power: Value to be sent as a part of the OLPCMODE command
-*
-* Return: void
-*/
-void hdd_set_olpc_mode(tHalHandle hHal, bool low_power)
-{
-    sme_update_olpc_mode(hHal, low_power);
 }
 
 /**
@@ -4092,21 +4078,6 @@ static int hdd_driver_command(hdd_adapter_t *pAdapter,
 
            ptr = (tANI_U8*)command + 11;
            hdd_set_vowifi_mode(pHddCtx, *ptr - '0');
-	}
-
-       else if (strncmp(command, "OLPCMODE", 8) == 0)
-       {
-           tANI_U8 *ptr;
-
-           ret = hdd_drv_cmd_validate(command, 8);
-           if (ret)
-               goto exit;
-
-           VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
-                      " Received Command to go to low power mode in %s", __func__);
-
-           ptr = (tANI_U8*)command + 9;
-           hdd_set_olpc_mode((tHalHandle)(pHddCtx->hHal), *ptr - '0');
         }
 
        else if(strncmp(command, "SETSUSPENDMODE", 14) == 0)
@@ -9159,7 +9130,7 @@ static hdd_adapter_t* hdd_alloc_station_adapter( hdd_context_t *pHddCtx, tSirMac
 
       hdd_set_station_ops( pAdapter->dev );
 
-      hdd_dev_setup_destructor(pWlanDev);
+      pWlanDev->destructor = free_netdev;
       pWlanDev->ieee80211_ptr = &pAdapter->wdev ;
       pAdapter->wdev.wiphy = pHddCtx->wiphy;  
       pAdapter->wdev.netdev =  pWlanDev;
@@ -13503,7 +13474,7 @@ void wlan_hdd_defer_scan_init_work(hdd_context_t *pHddCtx,
         pHddCtx->scan_ctxt.attempt = 0;
         pHddCtx->scan_ctxt.magic = TDLS_CTX_MAGIC;
     }
-	schedule_delayed_work(&pHddCtx->scan_ctxt.scan_work, delay);
+    schedule_delayed_work(&pHddCtx->scan_ctxt.scan_work, delay);
 }
 
 void wlan_hdd_init_deinit_defer_scan_context(scan_context_t *scan_ctx)
@@ -13956,22 +13927,6 @@ int hdd_wlan_startup(struct device *dev )
    }
    {
       eHalStatus halStatus;
-
-      /* Overwrite the Mac address if config file exist */
-      if (VOS_STATUS_SUCCESS != hdd_update_mac_config(pHddCtx))
-      {
-         hddLog(VOS_TRACE_LEVEL_WARN,
-                "%s: Didn't overwrite MAC from config file",
-                __func__);
-      } else {
-         pr_info("%s: WLAN Mac Addr from config: %02X:%02X:%02X:%02X:%02X:%02X\n", WLAN_MODULE_NAME,
-                 pHddCtx->cfg_ini->intfMacAddr[0].bytes[0],
-                 pHddCtx->cfg_ini->intfMacAddr[0].bytes[1],
-                 pHddCtx->cfg_ini->intfMacAddr[0].bytes[2],
-                 pHddCtx->cfg_ini->intfMacAddr[0].bytes[3],
-                 pHddCtx->cfg_ini->intfMacAddr[0].bytes[4],
-                 pHddCtx->cfg_ini->intfMacAddr[0].bytes[5]);
-      }
 
       /* Set the MAC Address Currently this is used by HAL to
        * add self sta. Remove this once self sta is added as
