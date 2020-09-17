@@ -91,26 +91,6 @@ static void quota2_work(struct work_struct *work)
 	kobject_uevent_env(quota_kobj, KOBJ_CHANGE, envp);
 }
 
-static void quota2_log(const struct net_device *in,
-		       const struct net_device *out,
-		       struct  xt_quota_counter *q,
-		       const char *prefix)
-{
-	if (!prefix)
-		return;
-
-	strlcpy(q->last_prefix, prefix, QUOTA2_SYSFS_WORK_MAX_SIZE);
-
-	if (in)
-		strlcpy(q->last_iface, in->name, QUOTA2_SYSFS_WORK_MAX_SIZE);
-	else if (out)
-		strlcpy(q->last_iface, out->name, QUOTA2_SYSFS_WORK_MAX_SIZE);
-	else
-		strlcpy(q->last_iface, "UNKNOWN", QUOTA2_SYSFS_WORK_MAX_SIZE);
-
-	schedule_work(&q->work);
-}
-
 static ssize_t quota_proc_read(struct file *file, char __user *buf,
 			   size_t size, loff_t *ppos)
 {

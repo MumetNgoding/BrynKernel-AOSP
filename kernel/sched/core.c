@@ -6552,8 +6552,8 @@ static int init_rootdomain(struct root_domain *rd)
 
 free_cpudl:
 	cpudl_cleanup(&rd->cpudl);
-free_rto_mask:
-	free_cpumask_var(rd->rto_mask);
+//free_rto_mask:
+//	free_cpumask_var(rd->rto_mask);
 free_dlo_mask:
 	free_cpumask_var(rd->dlo_mask);
 free_online:
