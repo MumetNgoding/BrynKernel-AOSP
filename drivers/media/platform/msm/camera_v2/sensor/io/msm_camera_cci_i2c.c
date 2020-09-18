@@ -134,8 +134,6 @@ int32_t msm_camera_cci_i2c_write_seq(struct msm_camera_i2c_client *client,
 	uint32_t i = 0;
 	struct msm_camera_cci_ctrl cci_ctrl;
 	struct msm_camera_i2c_reg_array *reg_conf_tbl = NULL;
-	struct msm_camera_i2c_reg_array reg_tbl_onstack[
-		SZ_4K / sizeof(struct msm_camera_i2c_reg_array)];
 
 	if ((client->addr_type != MSM_CAMERA_I2C_BYTE_ADDR
 		&& client->addr_type != MSM_CAMERA_I2C_WORD_ADDR)
@@ -151,25 +149,15 @@ int32_t msm_camera_cci_i2c_write_seq(struct msm_camera_i2c_client *client,
 	S_I2C_DBG("%s reg addr = 0x%x num bytes: %d\n",
 		__func__, addr, num_byte);
 
-	if (num_byte <= ARRAY_SIZE(reg_tbl_onstack)) {
-		reg_conf_tbl = reg_tbl_onstack;
-	} else {
-		reg_conf_tbl = kmalloc(num_byte *
-			(sizeof(struct msm_camera_i2c_reg_array)), GFP_KERNEL);
-		if (!reg_conf_tbl) {
-			pr_err("%s:%d no memory\n", __func__, __LINE__);
-			return -ENOMEM;
-		}
-	}
+	reg_conf_tbl = kzalloc(num_byte *
+		(sizeof(struct msm_camera_i2c_reg_array)), GFP_KERNEL);
+	if (!reg_conf_tbl)
+		return -ENOMEM;
 
-	reg_conf_tbl[0] = (typeof(*reg_conf_tbl)){
-		.reg_addr = addr,
-		.reg_data = data[0]
-	};
-	for (i = 1; i < num_byte; i++) {
-		reg_conf_tbl[i] = (typeof(*reg_conf_tbl)){
-			.reg_data = data[i]
-		};
+	reg_conf_tbl[0].reg_addr = addr;
+	for (i = 0; i < num_byte; i++) {
+		reg_conf_tbl[i].reg_data = data[i];
+		reg_conf_tbl[i].delay = 0;
 	}
 	cci_ctrl.cmd = MSM_CCI_I2C_WRITE_SEQ;
 	cci_ctrl.cci_info = client->cci_client;
@@ -182,8 +170,8 @@ int32_t msm_camera_cci_i2c_write_seq(struct msm_camera_i2c_client *client,
 			core, ioctl, VIDIOC_MSM_CCI_CFG, &cci_ctrl);
 	CDBG("%s line %d rc = %d\n", __func__, __LINE__, rc);
 	rc = cci_ctrl.status;
-	if (reg_conf_tbl != reg_tbl_onstack)
-		kfree(reg_conf_tbl);
+	kfree(reg_conf_tbl);
+	reg_conf_tbl = NULL;
 	return rc;
 }
 
