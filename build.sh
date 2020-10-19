@@ -5,7 +5,7 @@
 # Android Kernel Build Script
 
 # Main environtment
-KERNEL_DIR=${HOME}/$(basename $(pwd))
+KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb
 ZIP_DIR=$KERNEL_DIR/AnyKernel3
 CONFIG=onclite-perf_defconfig
@@ -19,7 +19,7 @@ export CROSS_COMPILE
 export CROSS_COMPILE_ARM32
 
 # Install build package for debian based linux
-sudo apt install bc bash git-core gnupg build-essential \
+apt install bc bash git-core gnupg build-essential \
     zip curl make automake autogen autoconf autotools-dev libtool shtool python \
     m4 gcc libtool zlib1g-dev flex
 
@@ -28,7 +28,7 @@ git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarc
 git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-9.0.0_r45 --depth=1 stock_32
 
 # Clone AnyKernel3
-git clone https://github.com/rama982/AnyKernel3 -b onc-miui
+git clone https://github.com/MumetNgoding/AnyKernel3.git --depth=1
 
 # Build start
 make O=out $CONFIG
