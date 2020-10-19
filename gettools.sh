@@ -5,9 +5,9 @@
 # Android Kernel Build Script
 
 # Install build package for debian based linux
-sudo apt install bc bash git-core gnupg build-essential \
-    zip curl make automake autogen autoconf autotools-dev libtool shtool python \
-    m4 gcc libtool zlib1g-dev flex bison libssl-dev
+# sudo apt install bc bash git-core gnupg build-essential \
+#    zip curl make automake autogen autoconf autotools-dev libtool shtool python \
+#    m4 gcc libtool zlib1g-dev flex bison libssl-dev
 
 # Clone toolchain
 git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r41 --depth=1 stock
