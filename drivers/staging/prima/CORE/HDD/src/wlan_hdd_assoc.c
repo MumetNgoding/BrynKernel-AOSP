@@ -800,13 +800,8 @@ static void hdd_copy_vht_operation(hdd_station_ctx_t *hdd_sta_ctx,
     vos_mem_zero(hdd_vht_ops, sizeof(struct ieee80211_vht_operation));
 
     hdd_vht_ops->chan_width = roam_vht_ops->chanWidth;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0))
-    hdd_vht_ops->center_freq_seg0_idx = roam_vht_ops->chanCenterFreqSeg1;
-    hdd_vht_ops->center_freq_seg1_idx = roam_vht_ops->chanCenterFreqSeg2;
-#else
     hdd_vht_ops->center_freq_seg1_idx = roam_vht_ops->chanCenterFreqSeg1;
     hdd_vht_ops->center_freq_seg2_idx = roam_vht_ops->chanCenterFreqSeg2;
-#endif
     hdd_vht_ops->basic_mcs_set = roam_vht_ops->basicMCSSet;
 }
 
@@ -1696,7 +1691,7 @@ static void hdd_check_and_move_if_sap_is_on_dfs_chan(hdd_context_t *hdd_ctx,
         }
 
         hddLog(LOG1, "Schedule workqueue to move the SAP to non DFS channel");
-			schedule_delayed_work(&hdd_ctx->ecsa_chan_change_work,
+        schedule_delayed_work(&hdd_ctx->ecsa_chan_change_work,
                             msecs_to_jiffies(ECSA_DFS_CHAN_CHANGE_DEFER_TIME));
     }
 }
@@ -2337,7 +2332,7 @@ hdd_schedule_ecsa_chan_change_work(hdd_context_t *hdd_ctx,
        time_diff = ECSA_SCC_CHAN_CHANGE_DEFER_INTERVAL - time_diff;
 
    hddLog(LOG1, FL("schedule ecsa_chan_change_work after %d ms"), time_diff);
-		schedule_delayed_work(&hdd_ctx->ecsa_chan_change_work,
+   schedule_delayed_work(&hdd_ctx->ecsa_chan_change_work,
                           msecs_to_jiffies(time_diff));
 }
 
@@ -4444,7 +4439,7 @@ eHalStatus hdd_smeRoamCallback( void *pContext, tCsrRoamInfo *pRoamInfo, tANI_U3
                          (pHostapdAdapter->sessionCtx.ap.operatingChannel !=
                           pRoamInfo->chan_info.chan_id))
                  {
-			schedule_delayed_work(&pHddCtx->ecsa_chan_change_work, 0);
+                     schedule_delayed_work(&pHddCtx->ecsa_chan_change_work, 0);
                  }
                  else
                      hddLog(LOG1, FL("SAP restart not required"));

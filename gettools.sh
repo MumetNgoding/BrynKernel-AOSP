@@ -4,31 +4,24 @@
 # Copyright (C) 2018 Rama Bondan Prakoso (rama982)
 # Android Kernel Build Script
 
-# Install build package for debian based linux
-# sudo apt install bc bash git-core gnupg build-essential \
-#    zip curl make automake autogen autoconf autotools-dev libtool shtool python \
-#    m4 gcc libtool zlib1g-dev flex bison libssl-dev
-
 # Clone toolchain
-git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r41 --depth=1 stock
-git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r41 --depth=1 stock_32
-#git clone https://github.com/arter97/arm64-gcc.git --depth=1 gcc64
-#git clone https://github.com/arter97/arm32-gcc.git --depth=1 gcc32
+git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r40 --depth=1 stock
+git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r40 --depth=1 stock_32
 
 # Clone AnyKernel3
-git clone https://github.com/MumetNgoding/AnyKernel3.git -b master
+git clone https://github.com/Risti699/AnyKernel3 -b master
 
 #Download Clang
 if [ ! -d clang ]; then
-    git clone https://github.com/silont-project/silont-clang.git --depth=1
-#    git clone https://github.com/arter97/arm64-gcc.git --depth=1
-#    git clone https://github.com/arter97/arm32-gcc.git --depth=1
-#    git clone https://github.com/MumetNgoding/proton-clang.git --depth=1
+    wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r383902c.tar.gz
+    mkdir -p clang/clang-r383902c
+    tar xvzf clang-r383902c.tar.gz -C clang/clang-r383902c
+    rm clang-r383902c.tar.gz
 fi
 
 # Download libufdt
 if [ ! -d libufdt ]; then
-    wget https://android.googlesource.com/platform/system/libufdt/+archive/refs/tags/android-10.0.0_r41/utils.tar.gz
+    wget https://android.googlesource.com/platform/system/libufdt/+archive/refs/tags/android-10.0.0_r40/utils.tar.gz
     mkdir -p libufdt
     tar xvzf utils.tar.gz -C libufdt
     rm utils.tar.gz

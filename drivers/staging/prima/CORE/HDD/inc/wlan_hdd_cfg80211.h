@@ -2119,9 +2119,4 @@ void wlan_hdd_cfg80211_scan_randomization_init(struct wiphy *wiphy)
 }
 #endif
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0))
-#define nla_parse(a, b, c, d, e) nla_parse(a, b, c, d, e, NULL)
-#define cfg80211_sched_scan_results(a) cfg80211_sched_scan_results(a, 0)
-#endif
-
 #endif
