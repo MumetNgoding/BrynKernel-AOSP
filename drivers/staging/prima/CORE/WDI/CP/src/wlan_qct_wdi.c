@@ -549,7 +549,6 @@ WDI_ReqProcFuncType  pfnReqProcTbl[WDI_MAX_UMAC_IND] =
   WDI_ProcessGetArpStatsReq,          /* WDI_FW_GET_ARP_STATS_REQ */
 
   WDI_ProcessBlackListReq,            /* WDI_BLACKLIST_REQ*/
-  WDI_process_low_power_request,      /* WDI_SET_LOW_POWER_REQ */
 
   /*-------------------------------------------------------------------------
     Indications
@@ -1816,7 +1815,6 @@ static char *WDI_getRespMsgString(wpt_uint16 wdiRespMsgId)
 #endif /* DHCP_SERVER_OFFLOAD */
     CASE_RETURN_STRING (WDI_CAPTURE_GET_TSF_TSTAMP_RSP);
     CASE_RETURN_STRING (WDI_BLACKLIST_RSP);
-    CASE_RETURN_STRING (WDI_SET_LOW_POWER_RSP);
     default:
         return "Unknown WDI MessageId";
   }

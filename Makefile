@@ -720,6 +720,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, misleading-indentation)
 ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
 KBUILD_CFLAGS	+= $(call cc-option,-ffunction-sections,)
 KBUILD_CFLAGS	+= $(call cc-option,-fdata-sections,)
+
 endif
 
 ifdef CONFIG_LTO_CLANG

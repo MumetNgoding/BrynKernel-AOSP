@@ -890,7 +890,7 @@ typedef enum
 #define CFG_PER_BSSID_BLACKLIST_TIMEOUT_NAME               "gBssidBlacklistTimeOut"
 #define CFG_PER_BSSID_BLACKLIST_TIMEOUT_MIN                (0)
 #define CFG_PER_BSSID_BLACKLIST_TIMEOUT_MAX                (240) //Max timeout
-#define CFG_PER_BSSID_BLACKLIST_TIMEOUT_DEFAULT            (0)
+#define CFG_PER_BSSID_BLACKLIST_TIMEOUT_DEFAULT            (10)
 #endif // FEATURE_WLAN_LFR
 
 #if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
@@ -3940,13 +3940,15 @@ typedef struct
 #ifdef FEATURE_WLAN_LFR
    uint8_t                     bssid_blacklist_timeout;
 #endif
+#ifdef FEATURE_WLAN_LFR
+   uint8_t                     bssid_blacklist_timeout;
+#endif
 } hdd_config_t;
 
 /*--------------------------------------------------------------------------- 
   Function declarations and documenation
   -------------------------------------------------------------------------*/ 
 VOS_STATUS hdd_parse_config_ini(hdd_context_t *pHddCtx);
-VOS_STATUS hdd_update_mac_config(hdd_context_t *pHddCtx);
 VOS_STATUS hdd_set_sme_config( hdd_context_t *pHddCtx );
 v_BOOL_t hdd_update_config_dat ( hdd_context_t *pHddCtx );
 VOS_STATUS hdd_cfg_get_config(hdd_context_t *pHddCtx, char *pBuf, int buflen);

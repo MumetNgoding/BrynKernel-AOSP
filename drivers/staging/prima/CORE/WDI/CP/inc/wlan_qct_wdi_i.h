@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2012-2017, 2020 The Linux Foundation. All rights reserved.
  *
@@ -507,7 +508,6 @@ typedef enum
 
   /* BLACKLIST Request */
   WDI_BLACKLIST_REQ                              = 127,
-  WDI_SET_LOW_POWER_REQ                          = 128,
   WDI_MAX_REQ,
 
   /*Send a suspend Indication down to HAL*/
@@ -899,8 +899,6 @@ typedef enum
 
   /* BLACKLIST Response */
   WDI_BLACKLIST_RSP                              = 126,
-  WDI_SET_LOW_POWER_RSP                          = 127,
-
   /*-------------------------------------------------------------------------
     Indications
      !! Keep these last in the enum if possible
