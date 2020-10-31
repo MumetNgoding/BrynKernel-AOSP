@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   compile:
    docker:
-      - image: bryanhafidz/bryan-docker:0x01
+      - image: bryanhafidz/bryan-docker:0x02
    steps:
       - run:
           command: |
