@@ -8,7 +8,7 @@
 #apt-get -y install bc build-essential zip curl libstdc++6 git default-jre default-jdk wget nano python-is-python3 gcc clang libssl-dev rsync flex bison && pip3 install telegram-send
 
 # Clean Before Build
-#make mrproper
+make mrproper
 
 # Main environtment
 KERNEL_DIR=$PWD
@@ -25,6 +25,7 @@ export CROSS_COMPILE
 export CROSS_COMPILE_ARM32
 
 # Build start
+START=$(date +%s)
 make O=out $CONFIG
 make -j$(nproc --all) O=out \
                       ARCH=arm64 \
@@ -61,13 +62,16 @@ cd $ZIP_DIR
 cp $KERN_IMG zImage
 make normal &>/dev/null
 echo "Flashable zip generated under $ZIP_DIR."
-# Push to Telegram
+echo "Please Wait ... Pushing ZIP Kernel to Telegram ..."
 
-#cd /root/project/Q/AnyKernel3
+# Push to Telegram
+END=$(date -u +%s)
+DURATION=$(( END - START ))
+
 cd $KERNEL_DIR/AnyKernel3
-mv "$(echo SiLonT-*.zip)" "/root/project/Q"
-#cd /root/project/Q
+mv "$(echo SiLonT-*.zip)" "$KERNEL_DIR"
 cd $KERNEL_DIR
+
 # Get Telegram Script
 wget https://raw.githubusercontent.com/MumetNgoding/Magic-Script/main/telegram
 chmod +x telegram
@@ -79,7 +83,7 @@ COMMIT=$(git log --pretty=format:'%h: %s' -1)
 CPU=$(lscpu | sed -nr '/Model name/ s/.*:\s*(.*) @ .*/\1/p')
 
 # Get Script Source
-./telegram -f "$(echo -e SiLonT-*.zip)" "$(echo LATEST COMMIT: $'\n' $COMMIT  $'\n' DATE: $'\n' $KBUILD_BUILD_TIMESTAMP $'\n' BUILD USING: $'\n' $CPU $'\n' CC AUTHOR: $'\n' @BryanHafidzTorvalds)"
+./telegram -f "$(echo -e SiLonT-*.zip)" "$(echo LATEST COMMIT: $'\n' $COMMIT  $'\n' DATE: $'\n' $KBUILD_BUILD_TIMESTAMP $'\n' BUILD USING: $'\n' $CPU $'\n' CC AUTHOR: $'\n' @BryanHafidzTorvalds $'\n' DURATION: $'\n' $DURATION Seconds)"
 rm "$(echo SiLonT-*.zip)"
 rm telegram
 echo -e "\n(!) Done Push to Telegram"
