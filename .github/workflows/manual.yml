@@ -8,11 +8,11 @@ jobs:
     - uses: actions/checkout@v2
     - name: Run a multi-line script
       run: |
-        git config --global user.name "MumetNgoding"
+           git config --global user.name "MumetNgoding"
            git config --global user.email "nugroho31.com@gmail.com"
+           sudo apt-get -y install bc build-essential zip curl libstdc++6 git default-jre default-jdk wget nano python-is-python3 gcc clang libssl-dev rsync flex bison
            git clone https://github.com/MumetNgoding/BrynKernel-AOSP Q
            cd Q
-           apt-get -y install bc build-essential zip curl libstdc++6 git default-jre default-jdk wget nano python-is-python3 gcc clang libssl-dev rsync flex bison
            chmod a+x gettools.sh
            chmod a+x build.clang.sh
            ./gettools.sh
