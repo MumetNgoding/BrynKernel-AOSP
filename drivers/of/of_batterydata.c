@@ -344,6 +344,7 @@ struct device_node *of_batterydata_get_best_profile(
 	 */
 	for_each_child_of_node(batterydata_container_node, node) {
 #if 0
+		batt_type = "3668695_LC_M5100_Coslight_4000mAH_averaged_MasterSlave_Oct30th2018";
 		if (batt_type != NULL) {
 			rc = of_property_read_string(node, "qcom,battery-type",
 							&battery_type);
