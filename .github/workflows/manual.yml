@@ -10,7 +10,7 @@ jobs:
       run: |
         git config --global user.name "MumetNgoding"
            git config --global user.email "nugroho31.com@gmail.com"
-           git clone https://github.com/MumetNgoding/BrynKernel-AOSP -b Q Q
+           git clone https://github.com/MumetNgoding/BrynKernel-AOSP Q
            cd Q
            chmod a+x gettools.sh
            chmod a+x build.clang.sh
