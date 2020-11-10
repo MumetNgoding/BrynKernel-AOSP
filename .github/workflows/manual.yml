@@ -1,0 +1,18 @@
+on: [push]
+
+jobs:
+  build:
+    name: Greeting
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run a multi-line script
+      run: |
+        git config --global user.name "MumetNgoding"
+           git config --global user.email "nugroho31.com@gmail.com"
+           git clone https://github.com/MumetNgoding/BrynKernel-AOSP -b Q Q
+           cd Q
+           chmod a+x gettools.sh
+           chmod a+x build.clang.sh
+           ./gettools.sh
+           ./build.clang.sh
