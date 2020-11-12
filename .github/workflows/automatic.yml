@@ -16,15 +16,16 @@ jobs:
       uses: zcong1993/setup-timezone@master
       with:
         timezone: Asia/Jakarta
-    - name: Automatic Kernel PUSH
+    - name: Automatic Kernel Push
       run: |
            git config --global user.name "MumetNgoding"
            git config --global user.email "nugroho31.com@gmail.com"
            sudo apt-get -y install bc build-essential zip curl libstdc++6 git wget nano gcc clang libssl-dev rsync flex bison
-           git clone https://github.com/MumetNgoding/BrynKernel-AOSP Q
+           git clone https://github.com/MumetNgoding/BrynKernel-AOSP -b R-Workflow Q
            cd Q
-           git fetch https://github.com/MumetNgoding/BrynKernel-AOSP
+           git fetch https://github.com/MumetNgoding/BrynKernel-AOSP -b R
            git merge FETCH_HEAD
+           git push
            chmod a+x gettools.sh
            chmod a+x build.clang.sh
            ./gettools.sh
