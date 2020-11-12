@@ -1,12 +1,22 @@
-on: [push]
-
+name: BrynKernel-AOSP
+on:
+  push:
+    branches:
+      - R-Workflow
+  schedule:
+    - cron: '0 */12 * * *'
+      
 jobs:
   build:
     name: Kernel-Builder
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-    - name: Run a multi-line script
+    - name: Setup timezone
+      uses: zcong1993/setup-timezone@master
+      with:
+        timezone: Asia/Jakarta
+    - name: Automatic Kernel PUSH
       run: |
            git config --global user.name "MumetNgoding"
            git config --global user.email "nugroho31.com@gmail.com"
