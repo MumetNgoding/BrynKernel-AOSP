@@ -25,7 +25,7 @@ jobs:
            cd Q
            git fetch https://github.com/MumetNgoding/BrynKernel-AOSP R
            git merge FETCH_HEAD
-           git push
+           git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} 
            chmod a+x gettools.sh
            chmod a+x build.clang.sh
            ./gettools.sh
