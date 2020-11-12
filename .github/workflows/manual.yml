@@ -23,6 +23,8 @@ jobs:
            sudo apt-get -y install bc build-essential zip curl libstdc++6 git wget nano gcc clang libssl-dev rsync flex bison
            git clone https://github.com/MumetNgoding/BrynKernel-AOSP Q
            cd Q
+           git fetch https://github.com/MumetNgoding/BrynKernel-AOSP
+           git merge FETCH_HEAD
            chmod a+x gettools.sh
            chmod a+x build.clang.sh
            ./gettools.sh
