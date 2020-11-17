@@ -55,7 +55,14 @@ for MODULES in $(find "${OUTDIR}" -name '*.ko'); do
             "${OUTDIR}/certs/signing_key.x509" \
             "${MODULES}"
     find "${OUTDIR}" -name '*.ko' -exec cp {} "${VENDOR_MODULEDIR}" \;
+    case ${MODULES} in
+            */wlan.ko)
+        cp "${MODULES}" "${VENDOR_MODULEDIR}/pronto_wlan.ko" ;;
+    esac
 done
+
+rm "${VENDOR_MODULEDIR}/wlan.ko"
+
 echo -e "\n(i) Done moving modules"
 
 cd $ZIP_DIR
