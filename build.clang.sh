@@ -24,6 +24,11 @@ export ARCH=arm64
 export CROSS_COMPILE
 export CROSS_COMPILE_ARM32
 
+wget https://raw.githubusercontent.com/MumetNgoding/Magic-Script/main/telegram
+chmod +x telegram
+./telegram -f "$(echo ⚒️  [*BUILDING STARTED*] ⚒️)"
+rm telegram
+
 # Build start
 START=$(date +%s)
 make O=out $CONFIG
@@ -35,6 +40,10 @@ CROSS_COMPILE=aarch64-linux-android-
 
 if ! [ -a $KERN_IMG ]; then
     echo "Build error!"
+    wget https://raw.githubusercontent.com/MumetNgoding/Magic-Script/main/telegram
+    chmod +x telegram
+    ./telegram -f "$(echo -e log.txt)" "$(echo ⚒️  [*BUILDING ERROR !!*] ⚒️)"
+    rm telegram
     exit 1
 fi
 
